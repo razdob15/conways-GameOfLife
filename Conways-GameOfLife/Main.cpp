@@ -15,7 +15,7 @@ void Turn(bool board[BOARD_SIZE][BOARD_SIZE]);
 bool InitBoard(bool board[BOARD_SIZE][BOARD_SIZE], string dataFileName);
 
 int main(int argc, char* argv[])
-{
+ {
 	// Consts
 	const int TURN_TIME_MS = 1500;
 	const string INIT_LIVE_CELLS_FILE_NAME = "../Conways-GameOfLife/cells.txt";
@@ -85,9 +85,7 @@ void DrawBoard(bool board[BOARD_SIZE][BOARD_SIZE])
 	// Variables
 	int current_row;
 	int currernt_col;
-	
-	// Clear before drawing
-	system("CLS");
+	string strToPrint = "";		
 
 	// For ALL the board (include walls)
 	// Print the correct cell sign.
@@ -96,17 +94,23 @@ void DrawBoard(bool board[BOARD_SIZE][BOARD_SIZE])
 		for (currernt_col = -1; currernt_col < BOARD_SIZE + 1; currernt_col++)
 		{			
 			if (current_row < 0 || currernt_col < 0 || current_row == BOARD_SIZE || currernt_col == BOARD_SIZE )
-			{
-				cout << BORDER;
+			{				
+				strToPrint += BORDER;
 			}
 			else
-			{
-				cout << (board[current_row][currernt_col] ? LIVE : DEAD);
+			{				
+				strToPrint += (board[current_row][currernt_col] ? LIVE : DEAD);
 			}
 		}
 
-		cout << endl;
+		strToPrint += "\n";
 	}
+
+	// Clear before drawing
+	system("CLS");
+
+	// Draw the board
+	cout << strToPrint;
 }
 
 void Turn(bool board[BOARD_SIZE][BOARD_SIZE])
