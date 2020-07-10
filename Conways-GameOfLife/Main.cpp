@@ -2,7 +2,8 @@
 #include <windows.h>
 #include <fstream>
 #include <string>
-
+#include <stdio.h>
+#include <windows.graphics.h>
 using namespace std;
 
 // Global Consts
@@ -16,9 +17,8 @@ bool InitBoard(bool board[BOARD_SIZE][BOARD_SIZE], string dataFileName);
 
 int main(int argc, char* argv[])
  {
-	// Consts
-	const int TURN_TIME_MS = 1500;
-	const string INIT_LIVE_CELLS_FILE_NAME = "../Conways-GameOfLife/cells.txt";
+	const int TURN_TIME_MS = 50;
+	const string INIT_LIVE_CELLS_FILE_NAME = "../../Conways-GameOfLife/boards/acron.txt";
 
 	// Arrays
 	bool board[BOARD_SIZE][BOARD_SIZE]{};
