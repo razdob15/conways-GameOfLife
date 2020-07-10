@@ -14,6 +14,7 @@ void DrawBoard(bool board[BOARD_SIZE][BOARD_SIZE]);
 int CountNeig(bool board[BOARD_SIZE][BOARD_SIZE], int cell_row, int cell_col);
 void Turn(bool board[BOARD_SIZE][BOARD_SIZE]);
 bool InitBoard(bool board[BOARD_SIZE][BOARD_SIZE], string dataFileName);
+int CountLiveCells(bool board[BOARD_SIZE][BOARD_SIZE]);
 
 int main(int argc, char* argv[])
  {
@@ -22,6 +23,9 @@ int main(int argc, char* argv[])
 
 	// Arrays
 	bool board[BOARD_SIZE][BOARD_SIZE]{};
+
+	// Variables
+	int turnCount = 0;
 
 	// Code section
 	
@@ -39,6 +43,9 @@ int main(int argc, char* argv[])
 			Turn(board);
 			Sleep(TURN_TIME_MS);
 			DrawBoard(board);
+			cout << endl << "Turn: " << turnCount << endl;
+			cout << endl << "Live: " << CountLiveCells(board) << endl;
+			turnCount++;
 		}
 	}
 }
@@ -83,23 +90,23 @@ void DrawBoard(bool board[BOARD_SIZE][BOARD_SIZE])
 	const char BORDER = '@';
 
 	// Variables
-	int current_row;
+	int currentRow;
 	int currernt_col;
 	string strToPrint = "";		
 
 	// For ALL the board (include walls)
 	// Print the correct cell sign.
-	for (current_row = -1; current_row < BOARD_SIZE + 1; current_row++)
+	for (currentRow = -1; currentRow < BOARD_SIZE + 1; currentRow++)
 	{		
 		for (currernt_col = -1; currernt_col < BOARD_SIZE + 1; currernt_col++)
 		{			
-			if (current_row < 0 || currernt_col < 0 || current_row == BOARD_SIZE || currernt_col == BOARD_SIZE )
+			if (currentRow < 0 || currernt_col < 0 || currentRow == BOARD_SIZE || currernt_col == BOARD_SIZE )
 			{				
 				strToPrint += BORDER;
 			}
 			else
 			{				
-				strToPrint += (board[current_row][currernt_col] ? LIVE : DEAD);
+				strToPrint += (board[currentRow][currernt_col] ? LIVE : DEAD);
 			}
 		}
 
@@ -120,41 +127,41 @@ void Turn(bool board[BOARD_SIZE][BOARD_SIZE])
 
 	// Variables
 	int neigCount;	
-	int current_row;
-	int current_col;
+	int currentRow;
+	int currentCol;
 		
 	// Check all the cells
-	for (current_row = 0; current_row < BOARD_SIZE; current_row++)
+	for (currentRow = 0; currentRow < BOARD_SIZE; currentRow++)
 	{
-		for (current_col = 0; current_col < BOARD_SIZE; current_col++)
+		for (currentCol = 0; currentCol < BOARD_SIZE; currentCol++)
 		{			
-			neigCount = CountNeig(board, current_row, current_col);
+			neigCount = CountNeig(board, currentRow, currentCol);
 			
 			// Check if alive 
-			if (board[current_row][current_col] && (neigCount < 2 || neigCount > 3))
+			if (board[currentRow][currentCol] && (neigCount < 2 || neigCount > 3))
 			{
 				// Cell is dead
-				demoBoard[current_row][current_col] = false;
+				demoBoard[currentRow][currentCol] = false;
 			}
-			else if ((!board[current_row][current_col]) && neigCount == 3)
+			else if ((!board[currentRow][currentCol]) && neigCount == 3)
 			{
 				// Cell is becoming live
-				demoBoard[current_row][current_col] = true;
+				demoBoard[currentRow][currentCol] = true;
 			}
 			else
 			{
 				// No chage needed.
-				demoBoard[current_row][current_col] = board[current_row][current_col];
+				demoBoard[currentRow][currentCol] = board[currentRow][currentCol];
 			}
 		}
 	}
 
 	// Update board
-	for (current_row = 0; current_row < BOARD_SIZE; current_row++)
+	for (currentRow = 0; currentRow < BOARD_SIZE; currentRow++)
 	{
-		for (current_col = 0; current_col < BOARD_SIZE; current_col++)
+		for (currentCol = 0; currentCol < BOARD_SIZE; currentCol++)
 		{
-			board[current_row][current_col] = demoBoard[current_row][current_col];
+			board[currentRow][currentCol] = demoBoard[currentRow][currentCol];
 		}
 	}
 }
@@ -169,14 +176,14 @@ int CountNeig(bool board[BOARD_SIZE][BOARD_SIZE], int cell_row, int cell_col)
 	
 	// Variables
 	int liveNeigbhorsCounter = 0;
-	int current_row;
-	int current_col;
+	int currentRow;
+	int currentCol;
 
-	for (current_row = MIN_ROW; current_row <= MAX_ROW; current_row++)
+	for (currentRow = MIN_ROW; currentRow <= MAX_ROW; currentRow++)
 	{		
-		for (current_col = MIN_COL; current_col <= MAX_COL; current_col++)
+		for (currentCol = MIN_COL; currentCol <= MAX_COL; currentCol++)
 		{
-			if (board[current_row][current_col] && !(current_row == cell_row && current_col == cell_col))
+			if (board[currentRow][currentCol] && !(currentRow == cell_row && currentCol == cell_col))
 			{				
 				liveNeigbhorsCounter++;
 			}
@@ -184,4 +191,22 @@ int CountNeig(bool board[BOARD_SIZE][BOARD_SIZE], int cell_row, int cell_col)
 	}
 
 	return liveNeigbhorsCounter;
+}
+
+int CountLiveCells(bool board[BOARD_SIZE][BOARD_SIZE])
+{
+	// Variables
+	int liveCounter = 0;
+	int currentRow;
+	int currentCol;
+
+	for (currentRow = 0; currentRow < BOARD_SIZE; currentRow++)
+	{
+		for (currentCol = 0; currentCol < BOARD_SIZE; currentCol++)
+		{
+			liveCounter += (int)board[currentRow][currentCol];
+		}
+	}
+	return liveCounter;
+	
 }
